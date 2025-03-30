@@ -16,10 +16,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(windowScene: windowScene)
 		
 		let vc = ListViewController()
-		let navVC = UINavigationController(rootViewController: vc)
+		let navVC = getNavigationController(viewController: vc)
+		let listAssembly = ListAssembly(navigationController: navVC)
+		listAssembly.configure(with: vc)
 		
 		window?.rootViewController = navVC
 		window?.makeKeyAndVisible()
 	}
 }
 
+func getNavigationController(viewController: UIViewController) -> UINavigationController {
+	let navController = UINavigationController(rootViewController: viewController)
+	navController.navigationBar.prefersLargeTitles = true
+	
+	let appearance = UINavigationBarAppearance()
+	appearance.configureWithOpaqueBackground()
+	appearance.backgroundColor = .darkGray
+		
+	appearance.titleTextAttributes = [
+		.foregroundColor: UIColor(resource: .background),
+		.font: UIFont.systemFont(ofSize: 18, weight: .bold)
+	]
+	
+	appearance.largeTitleTextAttributes = [
+		.foregroundColor: UIColor(resource: .background),
+		.font: UIFont.systemFont(ofSize: 34, weight: .bold)
+	]
+	
+	navController.navigationBar.standardAppearance = appearance
+	navController.navigationBar.scrollEdgeAppearance = appearance
+	
+	return navController
+}
