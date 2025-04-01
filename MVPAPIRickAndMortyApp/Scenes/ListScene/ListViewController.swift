@@ -10,6 +10,7 @@ import UIKit
 protocol IListViewController: AnyObject {
 	func failure(error: Error)
 	func render(with items: [ViewModelList])
+	func refresh()
 }
 
 final class ListViewController: UITableViewController {
@@ -19,8 +20,18 @@ final class ListViewController: UITableViewController {
 	// MARK: - Private Property
 	private let cellIdentifier = "cellList"
 	private var items: [ViewModelList] = []
-	private lazy var searchController = UISearchController(searchResultsController: nil)
+	private let searchController = UISearchController(searchResultsController: nil)
 
+	private var searchBarIsEmpty: Bool {
+		guard let text = searchController.searchBar.text else { return false }
+		return text.isEmpty
+	}
+	
+	private var isFiltering: Bool {
+		let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+		return searchController.isActive && (!searchBarIsEmpty || searchBarScopeIsFiltering)
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupView()
@@ -42,6 +53,10 @@ final class ListViewController: UITableViewController {
 
 // MARK: - IListViewController
 extension ListViewController: IListViewController {
+	func refresh() {
+		self.searchController.searchBar.selectedScopeButtonIndex = 0
+	}
+	
 	func failure(error: Error) {
 		// TODO: что-то делаем если данных нет
 		print(error.localizedDescription)
@@ -167,7 +182,12 @@ extension ListViewController {
 // MARK: - UISearchBarDelegate
 extension ListViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-		presenter?.filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+		presenter?.filterContentForSearchText(
+			searchBar.text!,
+			scope: searchBar.scopeButtonTitles![selectedScope],
+			isFiltering: isFiltering,
+			searchBarIsEmpty: searchBarIsEmpty
+		)
 	}
 	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -186,7 +206,12 @@ extension ListViewController: UISearchResultsUpdating {
 		if searchController.isActive {
 			searchBar.setShowsScope(true, animated: true)
 		}
-		presenter?.filterContentForSearchText(searchController.searchBar.text!, scope: scope)
+		presenter?.filterContentForSearchText(
+			searchController.searchBar.text!,
+			scope: scope,
+			isFiltering: isFiltering,
+			searchBarIsEmpty: searchBarIsEmpty
+		)
 	}
 }
 

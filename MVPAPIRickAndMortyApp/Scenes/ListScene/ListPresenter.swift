@@ -19,17 +19,19 @@ protocol IListPresenter {
 	func refresh()
 	func clearCache()
 	func pressedCell(_ index: Int)
-	func filterContentForSearchText(_ searchText: String, scope: String)
+	func filterContentForSearchText(_ searchText: String, scope: String, isFiltering: Bool, searchBarIsEmpty: Bool)
 }
 
 final class ListPresenter {
 	private weak var view: IListViewController?
 	private let router: IListRouter
-	private let networkManager: NetworkManager
+	private let networkManager: INetworkManager
 
 	private var items: [Character] = []
+	private var filteredCharacters: [Character] = []
+
 	
-	init(view: IListViewController, router: IListRouter, networkManager: NetworkManager) {
+	init(view: IListViewController, router: IListRouter, networkManager: INetworkManager) {
 		self.view = view
 		self.router = router
 		self.networkManager = networkManager
@@ -53,11 +55,33 @@ private extension ListPresenter {
 				}
 			}
 	}
+	
+	func getListModels(items: [Character]) -> [ViewModelList] {
+		var listModels: [ViewModelList] = []
+		for item in items {
+			let model = ViewModelList(image: item.image, name: item.name, status: item.status)
+			listModels.append(model)
+		}
+		return listModels
+	}
 }
 
 extension ListPresenter: IListPresenter {
-	func filterContentForSearchText(_ searchText: String, scope: String) {
-		// TODO: sorted по введеному значению
+	func filterContentForSearchText(_ searchText: String, scope: String, isFiltering: Bool, searchBarIsEmpty: Bool) {
+		if isFiltering {
+			filteredCharacters = items.filter({ (item: Character) -> Bool in
+				let doesCategoryMatch = (scope == "All") || (item.status == scope)
+				if searchBarIsEmpty {
+					return doesCategoryMatch
+				} else {
+					return doesCategoryMatch && item.name.lowercased().contains(searchText.lowercased())
+				}
+			})
+			let characters = getListModels(items: filteredCharacters)
+			view?.render(with: characters)
+		} else {
+			render()
+		}
 	}
 	
 	func pressedCell(_ index: Int) {
@@ -74,14 +98,11 @@ extension ListPresenter: IListPresenter {
 	
 	func refresh() {
 		fetchCharacters()
+		view?.refresh()
 	}
 	
 	func render() {
-		var characters: [ViewModelList] = []
-		for item in items {
-			let character = ViewModelList(image: item.image, name: item.name, status: item.status)
-			characters.append(character)
-		}
+		let characters = getListModels(items: items)
 		view?.render(with: characters)
 	}
 }
