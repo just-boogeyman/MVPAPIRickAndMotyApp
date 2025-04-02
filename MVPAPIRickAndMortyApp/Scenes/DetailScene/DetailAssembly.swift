@@ -19,6 +19,7 @@ final class DetailAssembly {
 	}
 }
 
+// MARK: - BaseAssembly
 
 extension DetailAssembly: BaseAssembly {
 	func configure(with viewController: UIViewController) {

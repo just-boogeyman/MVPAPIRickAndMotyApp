@@ -11,6 +11,7 @@ import Kingfisher
 final class CustomViewCell: UIView {
 		
 	// MARK: - Lazy Properties
+	
 	private lazy var nameLabel = CustomLabel(
 		font: Constants.fontLabel,
 		size: Constants.sizeNameLabel
@@ -34,6 +35,7 @@ final class CustomViewCell: UIView {
 	}
 	
 	// MARK: - Public Metods
+	
 	func configure(_ item: ViewModelList) {
 		nameLabel.text = item.name
 		statusLabel.text = item.status
@@ -43,6 +45,7 @@ final class CustomViewCell: UIView {
 }
 
 // MARK: - Setup Views
+
 private extension CustomViewCell {
 	func setupView() {
 		backgroundColor = .lightGray
@@ -82,6 +85,7 @@ private extension CustomViewCell {
 }
 
 // MARK: - Private Methods
+
 private extension CustomViewCell {
 	func updateStatus(status: String) {
 		switch status {
@@ -110,6 +114,7 @@ private extension CustomViewCell {
 }
 
 // MARK: - Layout
+
 private extension CustomViewCell {
 	func layout() {
 		NSLayoutConstraint.activate([
@@ -134,6 +139,7 @@ private extension CustomViewCell {
 
 
 // MARK: - Constants
+
 private extension CustomViewCell {
 	enum Constants {
 		static let fontLabel = "Arial Rounded MT Bold"

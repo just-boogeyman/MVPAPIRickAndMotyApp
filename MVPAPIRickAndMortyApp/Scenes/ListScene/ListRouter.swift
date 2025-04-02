@@ -24,8 +24,9 @@ final class ListRouter {
 	}
 }
 
+// MARK: - IListRouter
+
 extension ListRouter: IListRouter {
-	
 	func routeTo(target: Any) {
 		guard let target = target as? ListRouter.Target else { return }
 		
