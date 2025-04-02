@@ -18,6 +18,7 @@ final class ListViewController: UITableViewController {
 	var presenter: IListPresenter?
 	
 	// MARK: - Private Property
+	
 	private let cellIdentifier = "cellList"
 	private var items: [ViewModelList] = []
 	private let searchController = UISearchController(searchResultsController: nil)
@@ -36,22 +37,10 @@ final class ListViewController: UITableViewController {
 		super.viewDidLoad()
 		setupView()
 	}
-	
-	// MARK: - Action
-	@objc func clearCache() {
-		presenter?.clearCache()
-	}
-	
-	@objc func infoApplication() {
-		// TODO: Переход на экран и информацией
-	}
-	
-	@objc private func chengeRefresh() {
-		presenter?.refresh()
-	}
 }
 
 // MARK: - IListViewController
+
 extension ListViewController: IListViewController {
 	func refresh() {
 		self.searchController.searchBar.selectedScopeButtonIndex = 0
@@ -72,6 +61,7 @@ extension ListViewController: IListViewController {
 }
 
 // MARK: - Private SetupView
+
 private extension ListViewController {
 	func setupView() {
 		view.backgroundColor = .darkGray
@@ -152,7 +142,24 @@ private extension ListViewController {
 	}
 }
 
+// MARK: - Action
+
+private extension ListViewController {
+	@objc func clearCache() {
+		presenter?.clearCache()
+	}
+	
+	@objc func infoApplication() {
+		// TODO: Переход на экран и информацией
+	}
+	
+	@objc private func chengeRefresh() {
+		presenter?.refresh()
+	}
+}
+
 // MARK: - UITableViewDataSource
+
 extension ListViewController {
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		items.count
@@ -172,6 +179,7 @@ extension ListViewController {
 }
 
 // MARK: - UITableViewDelegate
+
 extension ListViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
@@ -180,6 +188,7 @@ extension ListViewController {
 }
 
 // MARK: - UISearchBarDelegate
+
 extension ListViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 		presenter?.filterContentForSearchText(
@@ -199,6 +208,7 @@ extension ListViewController: UISearchBarDelegate {
 }
 
 // MARK: - UISearchResultsUpdating
+
 extension ListViewController: UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
 		let searchBar = searchController.searchBar
@@ -216,6 +226,7 @@ extension ListViewController: UISearchResultsUpdating {
 }
 
 // MARK: - Enum Constants
+
 extension ListViewController {
 	private enum Constants {
 		static let title = "Rick and Morty"

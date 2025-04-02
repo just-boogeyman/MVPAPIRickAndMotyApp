@@ -17,6 +17,7 @@ final class DetailViewController: UIViewController {
 	var presenter: IDetailPresenter?
 	
 	// MARK: - Lazy Properties
+	
 	private lazy var containerView = UIView()
 	private lazy var imageView = UIImageView()
 	private lazy var statusLabel = CustomLabel(
@@ -47,11 +48,14 @@ final class DetailViewController: UIViewController {
 	private lazy var circleView = UIView()
 	
 	// MARK: - Initializers
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()
 	}
 }
+
+// MARK: - IDetailViewController
 
 extension DetailViewController: IDetailViewController {
 	func render(_ item: Character) {
@@ -65,6 +69,7 @@ extension DetailViewController: IDetailViewController {
 }
 
 // MARK: - Setup Views
+
 private extension DetailViewController {
 	func setup() {
 		view.backgroundColor = .darkGray
@@ -128,6 +133,7 @@ private extension DetailViewController {
 }
 
 // MARK: - Private Methods
+
 private extension DetailViewController {
 	func fetchImage(url: String) {
 		let url = URL(string: url)
@@ -162,6 +168,7 @@ private extension DetailViewController {
 }
 
 // MARK: - Layout
+
 private extension DetailViewController {
 	func layout() {
 		NSLayoutConstraint.activate([
@@ -207,6 +214,7 @@ private extension DetailViewController {
 
 
 // MARK: - Constants
+
 private extension DetailViewController {
 	enum Constants {
 		static let fontLabel = "Arial Rounded MT Bold"

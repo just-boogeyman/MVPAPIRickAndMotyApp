@@ -24,6 +24,8 @@ final class DetailPresenter {
 	}
 }
 
+// MARK: - IDetailPresenter
+
 extension DetailPresenter: IDetailPresenter {
 	func render() {
 		view.render(item)

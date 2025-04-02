@@ -30,6 +30,7 @@ final class ListPresenter {
 	private var items: [Character] = []
 	private var filteredCharacters: [Character] = []
 
+	// MARK: - Lifecycle
 	
 	init(view: IListViewController, router: IListRouter, networkManager: INetworkManager) {
 		self.view = view
@@ -38,6 +39,8 @@ final class ListPresenter {
 		fetchCharacters()
 	}
 }
+
+// MARK: - Private Metods
 
 private extension ListPresenter {
 	func fetchCharacters() {
@@ -65,6 +68,8 @@ private extension ListPresenter {
 		return listModels
 	}
 }
+
+// MARK: - IListPresenter
 
 extension ListPresenter: IListPresenter {
 	func filterContentForSearchText(_ searchText: String, scope: String, isFiltering: Bool, searchBarIsEmpty: Bool) {
